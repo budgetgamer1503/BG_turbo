@@ -1,79 +1,96 @@
 # ⚡ BG Turbo Downloader & Repairer v1
 
-A premium, feature-rich, standalone Python utility designed for gamers and power users. This suite offers a professional dark-mode desktop GUI (and CLI fallback) to supercharge internet downloads, resume failed browser downloads, repair corrupted archives, and manage download queues with full speed throttling profiles.
+**Developed by:** Budgetgamer1503
 
-**Author & Coder:** Budgetgamer1503
+A premium, feature-rich Python utility built for gamers and power users. This suite provides a sleek, dark-mode desktop GUI (with an automatic CLI fallback) designed to maximize internet speeds, resume failed browser downloads, salvage corrupted archives, and manage download queues with smart throttling profiles.
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-### 🚀 1. Turbo Custom Downloader & Queue Manager
-- **32-Connection Thread Boost**: Accelerates downloads by splitting files into up to 64 concurrent segments.
-- **Download Queue**: Add multiple URLs, prioritize them, and download them sequentially.
-- **Bandwidth Throttling Profiles**:
-  - **Turbo Mode**: Maximum download speed utilizing 32+ connections.
-  - **Background Mode**: Lower priority, 4 connections, speed-limited to 500 KB/s (uses only ~10% bandwidth).
-  - **Custom Mode**: Define your own connection count and custom speed limits (in KB/s).
-- **Auto-Extraction**: Checkbox to automatically extract ZIP or RAR archives once they download successfully.
-- **Dynamic Chunk Grid Visualizer**: Visualizes download progress across connection segments as a real-time color-coded grid block dashboard.
+### 🚀 1. Turbo Downloader & Queue Manager
 
-### 📂 2. Browser Downloads Resumer
-- **Multi-Browser Scanning**: Automatically finds and queries history databases for **Google Chrome**, **Microsoft Edge**, **Brave Browser**, **Opera Stable**, **Opera GX**, and **Vivaldi**.
-- **Safe SQLite Reading**: Merges WAL-logged changes and parses browser history databases without locking errors.
-- **Smart Detection**: Detects paused, failed, or interrupted downloads and resumes them immediately using high-speed multi-threaded connections.
-- **Automatic Throttling**: Checks for restricted hosters (like *VikingFile*) and automatically throttles down to `1` connection to prevent data corruption.
+* **32-Connection Thread Boost:** Accelerates downloads by splitting files into up to 32 concurrent segments.
+* **Smart Queue Management:** Add multiple URLs, prioritize them, and let the app download them sequentially.
+* **Bandwidth Profiles:**
+* *Turbo Mode:* Maximum speed utilizing all available connections.
+* *Background Mode:* Restricted to 4 connections and capped at 500 KB/s so you can game or stream without lag.
+* *Custom Mode:* Set your own connection count and exact speed limits.
+
+
+* **Auto-Extraction:** Toggle a checkbox to automatically unpack ZIP or RAR archives the moment they finish downloading.
+* **Dynamic Progress Visualizer:** A real-time, color-coded grid block dashboard that shows exactly how each connection segment is performing.
+
+### 📂 2. Browser Download Resumer
+
+* **Multi-Browser Scanning:** Automatically detects and scans history databases for Chrome, Edge, Brave, Opera, Opera GX, and Vivaldi.
+* **Safe Database Reading:** Safely backs up and reads browser history databases without locking errors, even handling active Write-Ahead Log (WAL) files.
+* **Interrupted Download Recovery:** Automatically detects paused, failed, or interrupted browser downloads and takes over, finishing them via high-speed multi-threading.
+* **Host Restrictions Detection:** Recognizes hosters that block multi-threading (like VikingFile) and automatically scales back to 1 connection to prevent data corruption.
 
 ### 🛠️ 3. Archive Repairer & Hash Verifier
-- **Local Header Carving**: Repairs corrupted `.zip` archives by scanning and carving local file headers (`PK\x03\x04`), rebuilding central directories, and bypassing corrupted sections.
-- **UnRAR Fallback**: Forces extraction of salvageable files from corrupted `.rar` archives using WinRAR/UnRAR's Keep Broken Files (`-kb`) fallback parameters.
-- **Integrity Hash Verifier**: Instantly compute and compare **MD5**, **SHA-1**, and **SHA-256** checksums of files to verify they match original repack hashes.
 
-### 📖 4. Troubleshooter Guide
-- Detailed instructions for debugging common Windows setup errors (e.g., `ISDone.dll` / `Unarc.dll` errors).
+* **ZIP Header Carving:** Scans corrupted `.zip` files byte-by-byte for local file header signatures (`PK\x03\x04`), rebuilding the central directory and skipping unreadable sections.
+* **UnRAR Fallback:** Forces the extraction of salvageable files from broken `.rar` archives by passing the "Keep Broken Files" (`-kb`) parameter to WinRAR/UnRAR.
+* **Integrity Verification:** Instantly calculate and compare MD5, SHA-1, and SHA-256 checksums to ensure your downloads match original repack hashes.
 
----
+### 📖 4. Built-in Troubleshooter
 
-## 🛠️ Requirements & Installation
-
-The application runs entirely on the **Python Standard Library**—no external packages are required!
-
-### Prerequisites
-- Windows OS
-- Python 3.8 or higher
-
-### Running the App
-Double-click `v1.py` or run the following command in PowerShell/CMD:
-```powershell
-python v1.py
-```
-*If a display is not available, the application automatically falls back to a clean, interactive command-line interface (CLI) mode.*
-
----
-
-## 📦 Compiling to Standalone Executable (.exe)
-
-You can compile the script into a single, portable executable file using PyInstaller:
-
-1. Install PyInstaller:
-   ```powershell
-   pip install -r requirements.txt
-   ```
-2. Build the EXE:
-   ```powershell
-   pyinstaller --onefile --noconsole --name="BGTurboDownloader" v1.py
-   ```
-The compiled executable will be placed in the `dist/` directory.
+* Includes a dedicated guide for debugging common Windows installation and repack errors, such as the notorious `ISDone.dll` and `Unarc.dll` issues.
 
 ---
 
 ## ⚙️ How It Works Under the Hood
 
-### 1. Multi-Threaded Segmented Downloads
-When downloading a file, the downloader issues HTTP `Range` requests to fetch sections of the file concurrently. Individual segments are saved as temporary files (`temp_part_*`) and combined sequentially into the final file upon completion.
+### Multi-Threaded Segmented Downloads
 
-### 2. SQLite WAL Reader for Chrome History
-To safely read active Chrome downloads, the resumer performs a temporary backup of Chrome's history database. This handles Chrome's Write-Ahead Log (WAL) mode cleanly and avoids database lock (`database is locked`) issues.
+When a download begins, the application sends HTTP Range requests to fetch different sections of the file simultaneously. Each chunk is saved as a temporary file (`temp_part_*`). Once all parts are fully retrieved, they are seamlessly merged into the final file.
 
-### 3. ZIP File Carving
-If a `.zip` archive gets corrupted during download, standard extractors will reject it. The repairer scans byte-by-byte for local file header signatures (`PK\x03\x04`), extracts the compressed streams, and constructs a new, clean zip file containing only the salvageable files.
+### Safe SQLite WAL Reading
+
+To safely pull active downloads from your browser without causing crashes, the app copies the active history database to a temporary location. This allows it to read data locked by Chromium's Write-Ahead Log (WAL) without interfering with your open browser.
+
+### ZIP File Carving
+
+Standard extraction tools reject ZIP archives if they notice even minor corruption. This tool bypasses those restrictions by scanning raw bytes for local header signatures, extracting the intact data streams, and compiling them into a brand-new, uncorrupted archive.
+
+---
+
+## 🛠️ Setup & Installation
+
+### Prerequisites
+
+* Windows OS
+* Python 3.8 or higher
+* **Zero Dependencies:** The application runs entirely on the Python Standard Library. No external packages required!
+
+### Running the App
+
+Simply double-click `v1.py` or launch it via PowerShell/Command Prompt:
+
+```bash
+python v1.py
+
+```
+
+*Note: If a graphical environment is not detected, the application will automatically fall back to a clean, interactive command-line interface (CLI).*
+
+### 📦 Compiling to a Portable Executable (.exe)
+
+If you want to turn the script into a standalone Windows application that you can run anywhere without installing Python, use PyInstaller:
+
+1. Install PyInstaller:
+
+```bash
+pip install pyinstaller
+
+```
+
+2. Build the EXE:
+
+```bash
+pyinstaller --onefile --noconsole --name="BGTurboDownloader" v1.py
+
+```
+
+Once the process finishes, you will find your standalone executable in the newly created `dist/` folder.
