@@ -1,0 +1,5 @@
+# No external libraries are strictly required!
+# The entire suite runs on Python's built-in standard library (Tkinter, SQLite, hashlib, zlib, zipfile, threading).
+#
+# Optional: Install PyInstaller if you want to compile the application into a standalone Windows executable (.exe)
+pyinstaller>=6.0.0

@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller / Build
+build/
+dist/
+*.manifest
+*.spec
+
+# Temporary files & logs
+*.log
+*.crdownload
+chrome_history_temp_*.db*
+temp_part_*
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
